@@ -5,6 +5,95 @@
     "version": ""
   },
   "paths": {
+    "/api/rest/customer/{id}/details": {
+      "get": {
+        "summary": "findCustomerDetails",
+        "description": "***\nThe GraphQl query for this endpoint is:\n``` graphql\nquery getCustomerDetails($customerId: uuid = \"\") {\n  customers(where: {customer_id: {_eq: $customerId}}) {\n    customer_id\n    created_at\n    address\n    date_of_birth\n    phone_number\n  }\n}\n```",
+        "parameters": [
+          {
+            "description": "Your x-hasura-admin-secret will be used for authentication of the API request.",
+            "in": "header",
+            "name": "x-hasura-admin-secret",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "query",
+            "name": "customerId",
+            "schema": {
+              "default": "",
+              "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "customerId": {
+                    "default": "",
+                    "nullable": true,
+                    "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}",
+                    "title": "uuid",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "description": "Query parameters can also be provided in the request body as a JSON object",
+          "required": false
+        },
+        "responses": {
+          "200": {
+            "content": {
+              "application/json": {
+                "schema": {
+                  "properties": {
+                    "customers": {
+                      "items": {
+                        "description": "columns and relationships of \"customers\"",
+                        "nullable": false,
+                        "properties": {
+                          "address": {
+                            "nullable": true,
+                            "title": "String",
+                            "type": "string"
+                          },
+                          "created_at": {
+                            "$ref": "#/components/schemas/timestamp"
+                          },
+                          "customer_id": {
+                            "$ref": "#/components/schemas/uuid!"
+                          },
+                          "date_of_birth": {
+                            "$ref": "#/components/schemas/date!"
+                          },
+                          "phone_number": {
+                            "nullable": true,
+                            "title": "String",
+                            "type": "string"
+                          }
+                        },
+                        "title": "customers",
+                        "type": "object"
+                      },
+                      "nullable": false,
+                      "type": "array"
+                    }
+                  }
+                }
+              }
+            },
+            "description": "Responses for GET /api/rest/customer/{id}/details"
+          }
+        }
+      }
+    },
     "/api/rest/getcustomerdetails/{customerId}": {
       "get": {
         "summary": "getCustomerDetails",
@@ -19,7 +108,7 @@
             }
           },
           {
-            "in": "path",
+            "in": "query",
             "name": "customerId",
             "schema": {
               "default": "",
