@@ -5,10 +5,10 @@
     "version": ""
   },
   "paths": {
-    "/api/rest/getcustomerdetails": {
+    "/api/rest/getcustomerdetails/{customerId}": {
       "get": {
         "summary": "getCustomerDetails",
-        "description": "***\nThe GraphQl query for this endpoint is:\n``` graphql\nquery getCustomerDetails {\n  customers {\n    customer_id\n    created_at\n    address\n    date_of_birth\n    phone_number\n  }\n}\n```",
+        "description": "***\nThe GraphQl query for this endpoint is:\n``` graphql\nquery getCustomerDetails($customerId: uuid = \"\") {\n  customers(where: {customer_id: {_eq: $customerId}}) {\n    customer_id\n    created_at\n    address\n    date_of_birth\n    phone_number\n  }\n}\n```",
         "parameters": [
           {
             "description": "Your x-hasura-admin-secret will be used for authentication of the API request.",
@@ -17,8 +17,37 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "in": "path",
+            "name": "customerId",
+            "schema": {
+              "default": "",
+              "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}",
+              "type": "string"
+            }
           }
         ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "properties": {
+                  "customerId": {
+                    "default": "",
+                    "nullable": true,
+                    "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}",
+                    "title": "uuid",
+                    "type": "string"
+                  }
+                },
+                "type": "object"
+              }
+            }
+          },
+          "description": "Query parameters can also be provided in the request body as a JSON object",
+          "required": false
+        },
         "responses": {
           "200": {
             "content": {
@@ -60,7 +89,7 @@
                 }
               }
             },
-            "description": "Responses for GET /api/rest/getcustomerdetails"
+            "description": "Responses for GET /api/rest/getcustomerdetails/{customerId}"
           }
         }
       }
@@ -122,6 +151,12 @@
   },
   "components": {
     "schemas": {
+      "uuid": {
+        "nullable": true,
+        "pattern": "[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89aAbB][a-f0-9]{3}-[a-f0-9]{12}",
+        "title": "uuid",
+        "type": "string"
+      },
       "date!": {
         "nullable": false,
         "title": "date"
